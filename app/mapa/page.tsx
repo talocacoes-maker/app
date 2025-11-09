@@ -1,6 +1,6 @@
 "use client"
 import { useEffect, useState } from "react"
-import Map from "react-map-gl"
+import Map, { Marker } from "react-map-gl"
 import "mapbox-gl/dist/mapbox-gl.css"
 
 export default function MapaPage() {
@@ -23,7 +23,7 @@ export default function MapaPage() {
     <div className="p-6 bg-gray-100 min-h-screen">
       <h1 className="text-2xl font-bold mb-4">Mapa Operacional</h1>
       
-      <div className="bg-white rounded shadow p-4 h-[600px]">
+      <div className="bg-white rounded shadow h-[600px]">
         <Map
           mapboxAccessToken="pk.eyJ1IjoidGVzdGV1c2VyIiwiYSI6ImNrczI5NjVlZzA5bG4ycHBnbXl4b2x1ZmoifQ.Your_Token_Here"
           initialViewState={{
@@ -34,12 +34,31 @@ export default function MapaPage() {
           mapStyle="mapbox://styles/mapbox/streets-v11"
         >
           {locacoes.map((loc) => (
-            <div
-              key={loc.id}
-              className="absolute w-4 h-4 rounded-full border-2 border-white"
-              style={{
-                backgroundColor: getColor(loc.status),
-                transform: "translate(-50%, -50%)"
-              }}
-            >
-              <div className="absolute -top-8 left
+            <Marker key={loc.id} longitude={loc.lng} latitude={loc.lat} anchor="center">
+              <div
+                className="w-4 h-4 rounded-full border-2 border-white cursor-pointer"
+                style={{ backgroundColor: getColor(loc.status) }}
+                title={`${loc.cliente} - ${loc.status}`}
+              />
+            </Marker>
+          ))}
+        </Map>
+      </div>
+
+      <div className="mt-4 flex gap-4 text-sm">
+        <div className="flex items-center gap-2">
+          <div className="w-3 h-3 rounded-full bg-green-500"></div>
+          <span>Entregue</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+          <span>Alerta</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-3 h-3 rounded-full bg-red-500"></div>
+          <span>Vencido</span>
+        </div>
+      </div>
+    </div>
+  )
+}
